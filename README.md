@@ -1,2 +1,2 @@
-# StartUp_Master
+# Planeat
 Projet de Startup en Master
