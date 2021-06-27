@@ -6,15 +6,23 @@ permissions: read-all
 jobs:
   deploy_job:
     runs-on: ubuntu-latest
-    name: deploy
+    name: build&deploy
     steps:
+      # To use this repository's private action, you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - name: deploy file
+
+      - name: Install Dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+
+      - name: deploy file to server
         uses: wlixcc/SFTP-Deploy-Action@v1.0
         with:
-          server: ${{ secrets.ftp_server }}
-          username: ${{ secrets.ftp_username }}
+          username: ${{ secrets.FTP_USERNAME }}
+          server: ${{ secrets.FTP_SERVER }}
           ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          local_path: './build/'
+          local_path: './build/*'
+          remote_path: '/var/www/react-app'
           args: '-o ConnectTimeout=5'
